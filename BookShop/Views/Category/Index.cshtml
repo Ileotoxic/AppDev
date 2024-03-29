@@ -1,7 +1,7 @@
 ﻿@model List<Category>
 <partial name = "_Notification"/>
 <h1>Here is my Category List</h1>
-<a asp-controller="Category" asp-action="Create" class="btn btn-primary">Create</a>
+<a asp-controller="Category" asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-square"></i> Create</a>
 <table class="table table-bordered">
 	<thead>
 	<tr>
@@ -23,8 +23,10 @@
 				@category.DisplayOrder
 			</td>
 			<td>
-				<a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
-					<a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger">Delete</a>
+					<a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Edit</a>
+					<a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger"><i class="bi bi-trash-fill">Delete</i>
+
+			</a>
 			</td>
 		</tr>
 		}
