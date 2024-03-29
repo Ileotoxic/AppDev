@@ -1,0 +1,32 @@
+﻿@model Book
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="mb-3 row">
+            <label asp-for="Title"></label>
+            <input disabled asp-for="Title">
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Description"></label>
+            <input disabled asp-for="Description">
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Author"></label>
+            <input disabled asp-for="Author">
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Price"></label>
+            <input disabled asp-for="Price">
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="CategoryId"></label>
+            <input disabled asp-for="CategoryId">
+        </div>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-controller="Book" asp-action="Index" class="btn btn-primary">Back to List</a>
+    </div>
+</form>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
