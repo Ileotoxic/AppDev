@@ -2,6 +2,7 @@
 using BookShop.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookShop.Repository
 {
@@ -24,16 +25,25 @@ namespace BookShop.Repository
 			_dbSet.Remove(entity);
 		}
 
-		public T Get(Expression<Func<T, bool>> predicate)
+		public T Get(Expression<Func<T, bool>> predicate, string? includeProperty = null)
 		{
 			IQueryable<T> query = _dbSet;
 			query = query.Where(predicate);
+			if (!String.IsNullOrEmpty(includeProperty))
+			{
+				query.Include(includeProperty).ToList();
+			}
 			return query.FirstOrDefault();
 		}
 
-		public IEnumerable<T> GetAll()
+		public IEnumerable<T> GetAll(string? includedProperty = null)
 		{
-			return _dbSet.ToList();
+            IQueryable<T> query = _dbSet;
+            if (!String.IsNullOrEmpty(includedProperty))
+            {
+                query.Include(includedProperty).ToList();
+            }
+            return query.ToList();
 		}
 
 	}

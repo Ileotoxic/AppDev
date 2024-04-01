@@ -19,7 +19,7 @@ namespace BookShop.Controllers
 
         public IActionResult Index()
         {
-            List<Book> myList = _unitOfWork.BookRepository.GetAll().ToList();
+            List<Book> myList = _unitOfWork.BookRepository.GetAll("Category").ToList();
             return View(myList);
         }
         public IActionResult Create() 

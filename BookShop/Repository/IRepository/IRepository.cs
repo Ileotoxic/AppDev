@@ -6,7 +6,7 @@ namespace BookShop.Repository.IRepository
 	{
 		void Add(T entity);
 		void Delete(T entity);
-		IEnumerable<T> GetAll();
-		T Get(Expression<Func<T, bool>> predicate);
+		IEnumerable<T> GetAll(string? includedProperty=null);
+		T Get(Expression<Func<T, bool>> predicate,string? includeProperty=null);
 	}
 }
