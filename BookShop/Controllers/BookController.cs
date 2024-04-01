@@ -1,28 +1,39 @@
 ﻿using BookShop.Data;
 using BookShop.Models;
+using BookShop.Models.ViewModels;
 using BookShop.Repository;
 using BookShop.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Controllers
 {
     public class BookController : Controller
     {
-        private readonly IBookRepository BookRepository;
-        public BookController(IBookRepository context)
+        private readonly IUnitOfWork _unitOfWork;
+        public BookController(IUnitOfWork unitOfWork)
         {
-            BookRepository = context;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            List<Book> myList = BookRepository.GetAll().ToList();
+            List<Book> myList = _unitOfWork.BookRepository.GetAll().ToList();
             return View(myList);
         }
         public IActionResult Create() 
         { 
-            return View();
+            BookVM bookVM = new BookVM()
+            {
+                Categories = _unitOfWork.CategoryRepository.GetAll().Select(c=> new SelectListItem()
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }),
+                Book = new Book()
+            };
+            return View(bookVM);
         }
         [HttpPost]
 		public IActionResult Create(Book Book)
@@ -30,8 +41,8 @@ namespace BookShop.Controllers
           
             if (ModelState.IsValid)
             {
-				BookRepository.Add(Book);
-				BookRepository.Save();
+				_unitOfWork.BookRepository.Add(Book);
+                _unitOfWork.Save();
                 TempData["success"] = "Book created succesfully";
                 return RedirectToAction("Index");
             }
@@ -43,7 +54,7 @@ namespace BookShop.Controllers
             {
 				return NotFound();
             }
-			Book? Book= BookRepository.Get(c=>c.Id ==id);
+			Book? Book= _unitOfWork.BookRepository.Get(c=>c.Id ==id);
             if (Book == null)
             {
                 return NotFound();
@@ -55,8 +66,8 @@ namespace BookShop.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				BookRepository.Update(Book);
-				BookRepository.Save();
+				_unitOfWork.BookRepository.Update(Book);
+                _unitOfWork.Save();
 				TempData["success"] = "Book updated succesfully";
 				return RedirectToAction("Index");
 			}
@@ -68,7 +79,7 @@ namespace BookShop.Controllers
 			{
 				return NotFound();
 			}
-			Book? Book = BookRepository.Get(c => c.Id == id);
+			Book? Book = _unitOfWork.BookRepository.Get(c => c.Id == id);
 			if (Book == null)
 			{
 				return NotFound();
@@ -78,10 +89,10 @@ namespace BookShop.Controllers
 		[HttpPost]
 		public IActionResult Delete(Book Book)
 		{
-				BookRepository.Delete(Book);
-				BookRepository.Save();
-				TempData["success"] = "Book deleted succesfully";
-				return RedirectToAction("Index");
+            _unitOfWork.BookRepository.Delete(Book);
+            _unitOfWork.Save();
+			TempData["success"] = "Book deleted succesfully";
+			return RedirectToAction("Index");
 
 		}
 	}
