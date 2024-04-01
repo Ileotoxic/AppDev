@@ -12,9 +12,11 @@ namespace BookShop.Controllers
     public class BookController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public BookController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BookController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -36,17 +38,34 @@ namespace BookShop.Controllers
             return View(bookVM);
         }
         [HttpPost]
-		public IActionResult Create(Book Book)
+		public IActionResult Create(BookVM bookVM, IFormFile? file)
 		{
           
             if (ModelState.IsValid)
             {
-				_unitOfWork.BookRepository.Add(Book);
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                string bookPath = Path.Combine(wwwRootPath, @"img\Books");
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString()+Path.GetExtension(file.FileName);
+                    using (var fileStream = new FileStream(Path.Combine(bookPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    bookVM.Book.ImageUrl = @"\img\Books\" + fileName;
+                }
+				_unitOfWork.BookRepository.Add(bookVM.Book);
                 _unitOfWork.Save();
                 TempData["success"] = "Book created succesfully";
                 return RedirectToAction("Index");
             }
-			return View();
+            bookVM.Categories = _unitOfWork.CategoryRepository.GetAll().Select(c => new SelectListItem()
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            });
+
+            return View(bookVM);
 		}
         public IActionResult Edit(int? id)
         {
@@ -54,19 +73,23 @@ namespace BookShop.Controllers
             {
 				return NotFound();
             }
-			Book? Book= _unitOfWork.BookRepository.Get(c=>c.Id ==id);
-            if (Book == null)
+            BookVM bookVM = new BookVM()
             {
-                return NotFound();
-            }
-            return View(Book);
+                Categories = _unitOfWork.CategoryRepository.GetAll().Select(c => new SelectListItem()
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }),
+                Book = _unitOfWork.BookRepository.Get(c => c.Id == id)
+        };
+            return View(bookVM);
         }
 		[HttpPost]
-		public IActionResult Edit(Book Book)
+		public IActionResult Edit(BookVM bookVM)
 		{
 			if (ModelState.IsValid)
 			{
-				_unitOfWork.BookRepository.Update(Book);
+				_unitOfWork.BookRepository.Update(bookVM.Book);
                 _unitOfWork.Save();
 				TempData["success"] = "Book updated succesfully";
 				return RedirectToAction("Index");
@@ -79,7 +102,7 @@ namespace BookShop.Controllers
 			{
 				return NotFound();
 			}
-			Book? Book = _unitOfWork.BookRepository.Get(c => c.Id == id);
+			Book? Book = _unitOfWork.BookRepository.Get(c => c.Id == id,"Category");
 			if (Book == null)
 			{
 				return NotFound();
