@@ -3,13 +3,16 @@ using BookShop.Models;
 using BookShop.Models.ViewModels;
 using BookShop.Repository;
 using BookShop.Repository.IRepository;
+using BookShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area(SD.Admin)]
+    [Authorize(Roles = SD.Admin)]
     public class BookController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

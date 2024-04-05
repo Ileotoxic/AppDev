@@ -2,12 +2,15 @@
 using BookShop.Models;
 using BookShop.Repository;
 using BookShop.Repository.IRepository;
+using BookShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area(SD.Admin)]
+    [Authorize(Roles = SD.Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +24,7 @@ namespace BookShop.Areas.Admin.Controllers
             List<Category> myList = _unitOfWork.CategoryRepository.GetAll().ToList();
             return View(myList);
         }
+      
         public IActionResult Create()
         {
             return View();
