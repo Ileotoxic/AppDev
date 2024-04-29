@@ -18,7 +18,10 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStor
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IEmailSender,EmailSender>();
-
+builder.Services.AddAuthorization(option => { 
+    option.AddPolicy("Admin", policy => policy.RequireRole(SD.Admin));
+    option.AddPolicy("Customer", policy => policy.RequireRole(SD.Customer));
+});
 builder.Services.ConfigureApplicationCookie(option =>
 {
     option.LoginPath = $"/Identity/Account/Login";

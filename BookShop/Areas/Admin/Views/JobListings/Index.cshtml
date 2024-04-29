@@ -1,4 +1,4 @@
-﻿@model List<JobListingModel>
+﻿@model IEnumerable<JobListingModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,27 +6,31 @@
 
 <h1>Index</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                Description
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                ApplicationDeadline
+                @Html.DisplayNameFor(model => model.ApplicationDeadline)
             </th>
             <th>
-                Location
+                @Html.DisplayNameFor(model => model.Location)
             </th>
             <th>
-                ApplicationId
+                @Html.DisplayNameFor(model => model.ApplicationId)
             </th>
             <th>
-               Image
+                @Html.DisplayNameFor(model => model.Image)
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -50,7 +54,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Image)
             </td>
-        
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.JobListingId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.JobListingId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.JobListingId">Delete</a>
+            </td>
         </tr>
 }
     </tbody>

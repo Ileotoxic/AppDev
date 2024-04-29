@@ -1,6 +1,7 @@
 ﻿using BookShop.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookShop.Data
 {
@@ -8,11 +9,29 @@ namespace BookShop.Data
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Book> Books { get; set; }
-		public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicationModel> ApplicationModel { get; set; } = default!;
+        public DbSet<JobListingModel> JobListingModel { get; set; } = default!;
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var tableName = entityType.GetTableName();
+                if (tableName.StartsWith("AspNet"))
+                {
+                    entityType.SetTableName(tableName.Substring(6));
+                }
+            }
+            var keysProperties = modelBuilder.Model.GetEntityTypes()
+                .Select(x => x.FindPrimaryKey())
+                .SelectMany(x => x.Properties);
+            foreach (var property in keysProperties)
+            {
+                property.ValueGenerated = ValueGenerated.OnAdd;
+            }
+
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Adventure", Description = "So funny" },
                 new Category { Id = 2, Name = "Roman", Description = "So romantic" },
