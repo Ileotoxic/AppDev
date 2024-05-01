@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Areas.Admin.Controllers
 {
-  
+    [Area("Admin")]
+    [Authorize(Roles = "Admin,Customer")]
+
     public class JobListingsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,8 +20,7 @@ namespace BookShop.Areas.Admin.Controllers
 
         // GET: JobListingModels
         [Area("Admin")]
-        //[Authorize("Admin")]
-        [Authorize("Customer")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.JobListingModel.ToListAsync());
@@ -28,8 +29,7 @@ namespace BookShop.Areas.Admin.Controllers
 
         // GET: JobListingModels/Details/5
         [Area("Admin")]
-       // [Authorize("Admin")]
-        [Authorize("Customer")]
+        [Authorize("Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,8 +47,7 @@ namespace BookShop.Areas.Admin.Controllers
             return View(jobListingModel);
         }
         [Area("Admin")]
-       // [Authorize("Admin")]
-        [Authorize("Customer")]
+        [Authorize(Roles = "Admin,Customer")]
         // GET: JobListingModels/Create
         public IActionResult Create()
         {
@@ -58,11 +57,10 @@ namespace BookShop.Areas.Admin.Controllers
         // POST: JobListingModels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Area("Admin")]
-       // [Authorize("Admin")]
-        [Authorize("Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Area("Admin")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Create([Bind("JobListingId,Title,Description,ApplicationDeadline,Location,ApplicationId,Image")] JobListingModel jobListingModel)
         {
             if (ModelState.IsValid)
@@ -75,8 +73,7 @@ namespace BookShop.Areas.Admin.Controllers
         }
 
         [Area("Admin")]
-      //  [Authorize("Admin")]
-        [Authorize("Customer")]
+        [Authorize("Admin")]
         // GET: JobListingModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -99,8 +96,7 @@ namespace BookShop.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Area("Admin")]
-      //  [Authorize("Admin")]
-        [Authorize("Customer")]
+        [Authorize("Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("JobListingId,Title,Description,ApplicationDeadline,Location,ApplicationId,Image")] JobListingModel jobListingModel)
         {
             if (id != jobListingModel.JobListingId)

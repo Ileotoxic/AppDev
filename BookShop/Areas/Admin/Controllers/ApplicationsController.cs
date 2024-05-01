@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookShop.Areas.Admin.Controllers
 {
-   
+    [Area("Admin")]
+    [Authorize(Roles = "Admin,Customer")]
+
     public class ApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +20,7 @@ namespace BookShop.Areas.Admin.Controllers
 
         // GET: ApplicationModels
         [Area("Admin")]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.ApplicationModel.ToListAsync());
@@ -45,6 +47,8 @@ namespace BookShop.Areas.Admin.Controllers
         }
 
         // GET: ApplicationModels/Create
+        [Area("Admin")]
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +59,8 @@ namespace BookShop.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Area("Admin")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Create([Bind("ApplicationId,JobListingId,Message,Description,DisplayOrder")] ApplicationModel applicationModel)
         {
             if (ModelState.IsValid)
