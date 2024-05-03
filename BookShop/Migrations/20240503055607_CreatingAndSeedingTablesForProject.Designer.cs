@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240429023710_initdb2")]
-    partial class initdb2
+    [Migration("20240503055607_CreatingAndSeedingTablesForProject")]
+    partial class CreatingAndSeedingTablesForProject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,89 +51,6 @@ namespace BookShop.Migrations
                     b.ToTable("ApplicationModel");
                 });
 
-            modelBuilder.Entity("BookShop.Models.Book", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Books");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Author = "Microsoft",
-                            CategoryId = 1,
-                            Description = "Hello",
-                            Price = 10.0,
-                            Title = "C# Programming"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Author = "BTEC",
-                            CategoryId = 2,
-                            Description = "Learning Harder",
-                            Price = 11.0,
-                            Title = "Advanced Programming"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Author = "Sun",
-                            CategoryId = 3,
-                            Description = "Basic language",
-                            Price = 15.0,
-                            Title = "Java Programming"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Author = "Greenwich",
-                            CategoryId = 1,
-                            Description = "Really not easy",
-                            Price = 20.0,
-                            Title = "Data Structures"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Author = "Microsoft",
-                            CategoryId = 2,
-                            Description = "Now",
-                            Price = 10.0,
-                            Title = "App Dev"
-                        });
-                });
-
             modelBuilder.Entity("BookShop.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -144,9 +61,6 @@ namespace BookShop.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -160,30 +74,26 @@ namespace BookShop.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "So funny",
-                            DisplayOrder = 0,
-                            Name = "Adventure"
+                            Description = "A Back End Developer is responsible for server-side application logic and integration of the work front-end developers do.",
+                            Name = "Back-End Developer"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "So romantic",
-                            DisplayOrder = 0,
-                            Name = "Roman"
+                            Description = "A Front End Developer is focused on the user interface and user experience of a website or application.",
+                            Name = "Front-End Developer"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "So scary",
-                            DisplayOrder = 0,
-                            Name = "Horror"
+                            Description = "A Full Stack Developer is capable of working on both the front-end and back-end portions of an application.",
+                            Name = "Full Stack Developer"
                         },
                         new
                         {
                             Id = 4,
-                            Description = "So Boring",
-                            DisplayOrder = 0,
-                            Name = "Science"
+                            Description = "A Mobile Apps Developer is specialized in creating applications for mobile devices, such as smartphones and tablets.",
+                            Name = "Mobile Apps Developer"
                         });
                 });
 
@@ -198,8 +108,8 @@ namespace BookShop.Migrations
                     b.Property<DateTime>("ApplicationDeadline")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ApplicationId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -220,9 +130,49 @@ namespace BookShop.Migrations
 
                     b.HasKey("JobListingId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("EmployerApplicationId");
 
                     b.ToTable("JobListingModel");
+
+                    b.HasData(
+                        new
+                        {
+                            JobListingId = 1,
+                            ApplicationDeadline = new DateTime(2024, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CategoryId = 1,
+                            Description = "Hello",
+                            Location = "NY",
+                            Title = "C# Programming"
+                        },
+                        new
+                        {
+                            JobListingId = 2,
+                            ApplicationDeadline = new DateTime(2024, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CategoryId = 2,
+                            Description = "Learning Harder",
+                            Location = "NY",
+                            Title = "Advanced Programming"
+                        },
+                        new
+                        {
+                            JobListingId = 3,
+                            ApplicationDeadline = new DateTime(2024, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CategoryId = 3,
+                            Description = "Basic language",
+                            Location = "NY",
+                            Title = "Java Programming"
+                        },
+                        new
+                        {
+                            JobListingId = 4,
+                            ApplicationDeadline = new DateTime(2024, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CategoryId = 4,
+                            Description = "Really not easy",
+                            Location = "NY",
+                            Title = "Data Structures"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -459,7 +409,7 @@ namespace BookShop.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("BookShop.Models.Book", b =>
+            modelBuilder.Entity("BookShop.Models.JobListingModel", b =>
                 {
                     b.HasOne("BookShop.Models.Category", "Category")
                         .WithMany()
@@ -467,14 +417,11 @@ namespace BookShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("BookShop.Models.JobListingModel", b =>
-                {
                     b.HasOne("BookShop.Models.ApplicationModel", "Employer")
                         .WithMany()
                         .HasForeignKey("EmployerApplicationId");
+
+                    b.Navigation("Category");
 
                     b.Navigation("Employer");
                 });

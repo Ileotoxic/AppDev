@@ -1,11 +1,11 @@
-﻿using Microsoft.Identity.Client;
-
+﻿
 namespace BookShop.Repository.IRepository
 {
     public interface IUnitOfWork
     {
-        public ICategoryRepository CategoryRepository { get; }
-        public IBookRepository BookRepository { get; }
+        public IApplicationRepository ApplicationRepository { get; }
+        public IJobListingRepository JobListingRepository { get; }
+        public IApplicationUsersRepository ApplicationUsers { get; }
         void Save();
 
     }

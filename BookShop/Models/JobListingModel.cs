@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace BookShop.Models
 {
@@ -14,9 +15,10 @@ namespace BookShop.Models
         [Required]
         public string? Location { get; set; }
 
-        // Updated foreign key property
-        [ForeignKey(nameof(ApplicationId))]
-        public string? ApplicationId { get; set; }  // Change data type to string
+        public int CategoryId { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        [ValidateNever]
+        public Category Category { get; set; }
 
         // Navigation property to reference the employer (IdentityUser)
         public ApplicationModel? Employer { get; set; }

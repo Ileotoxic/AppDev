@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookShop.Models.ViewModels
 {
-    public class BookVM
+    public class JobVM
     {
-        public Book Book { get; set; }
+        public ApplicationModel Application { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> Categories { get; set; }
     }

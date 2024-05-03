@@ -6,14 +6,16 @@ namespace BookShop.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        public ICategoryRepository CategoryRepository { get; private set; }
-
-        public IBookRepository BookRepository { get; private set; }
+        public IApplicationRepository ApplicationRepository { get; private set; }
+        public IJobListingRepository JobListingRepository { get; private set; }
+        public IApplicationUsersRepository ApplicationUsers { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-            CategoryRepository = new CategoryRepository(context);
-            BookRepository = new BookRepository(context);
+            
+            ApplicationRepository = new ApplicationRepository(context);
+            JobListingRepository = new JobListingRepository(context);
+            ApplicationUsers = new ApplicationUserRepository(context);
         }
         public void Save()
         {
